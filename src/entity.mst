@@ -22,7 +22,7 @@ import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne
         scale:{{.}},{{/scale}}{{#enum}}
         enum:[{{.}}],{{/enum}}{{#array}}
         array:{{array}},{{/array}}
-        name:"{{name}}"
+        comment:"{{comment}}"
         }){{/options}}
     {{printPropertyVisibility}}{{toPropertyName tsName}}{{strictMode}}:{{tsType}}{{#options/nullable}} | null{{/options/nullable}};
         {{/relations}}{{#relations}}

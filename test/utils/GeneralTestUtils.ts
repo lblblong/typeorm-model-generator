@@ -41,6 +41,7 @@ export async function createMSSQLModels(
         password: String(process.env.MSSQL_Password),
         databaseType: "mssql",
         schemaName: "dbo,sch1,sch2",
+        tableName: "",
         ssl: yn(process.env.MSSQL_SSL)
     };
     await driver.ConnectToServer(connectionOptions);
@@ -92,6 +93,7 @@ export async function createPostgresModels(
         password: String(process.env.POSTGRES_Password),
         databaseType: "postgres",
         schemaName: "public,sch1,sch2",
+        tableName: "",
         ssl: yn(process.env.POSTGRES_SSL)
     };
     await driver.ConnectToServer(connectionOptions);
@@ -142,6 +144,7 @@ export async function createSQLiteModels(
         password: "",
         databaseType: "sqlite",
         schemaName: "",
+        tableName: "",
         ssl: false
     };
 
@@ -176,6 +179,7 @@ export async function createMysqlModels(
         password: String(process.env.MYSQL_Password),
         databaseType: "mysql",
         schemaName: "ignored",
+        tableName: "",
         ssl: yn(process.env.MYSQL_SSL)
     };
     await driver.ConnectToServer(connectionOptions);
@@ -218,6 +222,7 @@ export async function createMariaDBModels(
         password: String(process.env.MARIADB_Password),
         databaseType: "mariadb",
         schemaName: "ignored",
+        tableName: "",
         ssl: yn(process.env.MARIADB_SSL)
     };
     await driver.ConnectToServer(connectionOptions);
@@ -261,6 +266,7 @@ export async function createOracleDBModels(
         user: String(process.env.ORACLE_UsernameSys),
         password: String(process.env.ORACLE_PasswordSys),
         databaseType: "oracle",
+        tableName: "",
         schemaName: String(process.env.ORACLE_Username),
         ssl: yn(process.env.ORACLE_SSL)
     };

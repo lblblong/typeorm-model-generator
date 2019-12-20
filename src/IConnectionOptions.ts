@@ -5,6 +5,8 @@ export default class IConnectionOptions {
 
     public databaseName: string = "";
 
+    public tableName: string = "";
+
     public user: string = "";
 
     public password: string = "";

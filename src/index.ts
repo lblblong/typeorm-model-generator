@@ -64,6 +64,11 @@ function GetUtilParametersByArgs() {
             describe:
                 "Database name(or path for sqlite). You can pass multiple values separated by comma."
         })
+        .option("t",{
+            alias: "table",
+            default: "",
+            describe: "Table name, without entering all tables will be selected"
+        })
         .option("u", {
             alias: "user",
             describe: "Username for database server"
@@ -185,6 +190,7 @@ function GetUtilParametersByArgs() {
     }
     const connectionOptions: IConnectionOptions = new IConnectionOptions();
     connectionOptions.databaseName = argv.d ? argv.d.toString() : null;
+    connectionOptions.tableName = argv.t ? argv.t.toString() : '';
     connectionOptions.databaseType = argv.e;
     connectionOptions.host = argv.h;
     connectionOptions.password = argv.x ? argv.x.toString() : null;
@@ -277,7 +283,14 @@ async function GetUtilParametersByInquirer() {
                     "Database name: (You can pass multiple values separated by comma)",
                 name: "dbName",
                 type: "input"
-            }
+            },
+            {
+                default: "",
+                message:
+                    "Table name, without entering all tables will be selected",
+                name: "tableName",
+                type: "input"
+            },
         ]);
         if (
             connectionOptions.databaseType === "mssql" ||
@@ -298,6 +311,7 @@ async function GetUtilParametersByInquirer() {
         connectionOptions.user = answ.login;
         connectionOptions.password = answ.password;
         connectionOptions.databaseName = answ.dbName;
+        connectionOptions.tableName = answ.tableName;
         connectionOptions.ssl = answ.ssl;
     } else {
         connectionOptions.databaseName = ((await inquirer.prompt([

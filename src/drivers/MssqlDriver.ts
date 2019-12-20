@@ -54,10 +54,11 @@ WHERE TABLE_TYPE='BASE TABLE' and TABLE_SCHEMA in (${schema}) AND TABLE_CATALOG 
             CHARACTER_MAXIMUM_LENGTH: number;
             NUMERIC_PRECISION: number;
             NUMERIC_SCALE: number;
+            COLUMN_COMMENT: string;
             IsIdentity: number;
             IsUnique: number;
         }[] = (await request.query(`SELECT TABLE_NAME,COLUMN_NAME,COLUMN_DEFAULT,IS_NULLABLE,
-   DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION,NUMERIC_SCALE,
+   DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION,NUMERIC_SCALE,COLUMN_COMMENT,
    COLUMNPROPERTY(object_id(TABLE_NAME), COLUMN_NAME, 'IsIdentity') IsIdentity,
    (SELECT count(*)
     FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
@@ -82,6 +83,7 @@ WHERE TABLE_TYPE='BASE TABLE' and TABLE_SCHEMA in (${schema}) AND TABLE_CATALOG 
                     const colInfo: ColumnInfo = new ColumnInfo();
                     colInfo.tsName = resp.COLUMN_NAME;
                     colInfo.options.name = resp.COLUMN_NAME;
+                    colInfo.options.comment = resp.COLUMN_COMMENT;
                     colInfo.options.nullable = resp.IS_NULLABLE === "YES";
                     colInfo.options.generated = resp.IsIdentity === 1;
                     colInfo.options.unique = resp.IsUnique === 1;

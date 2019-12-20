@@ -50,7 +50,7 @@ describe("MssqlDriver", function() {
                 return response;
             }
         });
-        const result = await driver.GetAllTables("schema", "db");
+        const result = await driver.GetAllTables("schema", "db", "");
         const expectedResult = [] as EntityInfo[];
         const y = new EntityInfo();
         y.tsEntityName = "name";

@@ -26,7 +26,7 @@ export default class MysqlDriver extends AbstractDriver {
 
     private Connection: MYSQL.Connection;
 
-    public GetAllTablesQuery = async (schema: string, dbNames: string) => {
+    public GetAllTablesQuery = async (schema: string, dbNames: string, tableName: string) => {
         const response = this.ExecQuery<{
             TABLE_SCHEMA: string;
             TABLE_NAME: string;
@@ -36,14 +36,17 @@ export default class MysqlDriver extends AbstractDriver {
             WHERE table_type='BASE TABLE'
             AND table_schema IN (${MysqlDriver.escapeCommaSeparatedList(
                 dbNames
-            )})`);
+            )})
+            ${tableName ? `AND TABLE_NAME LIKE '${tableName}'` : ""}
+            `);
         return response;
     };
 
     public async GetCoulmnsFromEntity(
         entities: EntityInfo[],
         schema: string,
-        dbNames: string
+        dbNames: string,
+        tableName: string
     ): Promise<EntityInfo[]> {
         const response = await this.ExecQuery<{
             TABLE_NAME: string;
@@ -54,15 +57,17 @@ export default class MysqlDriver extends AbstractDriver {
             CHARACTER_MAXIMUM_LENGTH: number;
             NUMERIC_PRECISION: number;
             NUMERIC_SCALE: number;
+            COLUMN_COMMENT: string;
             IsIdentity: number;
             COLUMN_TYPE: string;
             COLUMN_KEY: string;
         }>(`SELECT TABLE_NAME,COLUMN_NAME,COLUMN_DEFAULT,IS_NULLABLE,
-            DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION,NUMERIC_SCALE,
+            DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION,NUMERIC_SCALE,COLUMN_COMMENT,
             CASE WHEN EXTRA like '%auto_increment%' THEN 1 ELSE 0 END IsIdentity, COLUMN_TYPE, COLUMN_KEY
             FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA IN (${MysqlDriver.escapeCommaSeparatedList(
                 dbNames
             )})
+            ${tableName ? `AND TABLE_NAME LIKE '${tableName}'` : ""}
 			order by ordinal_position`);
         entities.forEach(ent => {
             response
@@ -71,6 +76,7 @@ export default class MysqlDriver extends AbstractDriver {
                     const colInfo: ColumnInfo = new ColumnInfo();
                     colInfo.tsName = resp.COLUMN_NAME;
                     colInfo.options.name = resp.COLUMN_NAME;
+                    colInfo.options.comment = resp.COLUMN_COMMENT;
                     colInfo.options.nullable = resp.IS_NULLABLE === "YES";
                     colInfo.options.generated = resp.IsIdentity === 1;
                     colInfo.options.unique = resp.COLUMN_KEY === "UNI";

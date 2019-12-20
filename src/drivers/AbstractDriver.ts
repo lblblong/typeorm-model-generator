@@ -68,7 +68,8 @@ export default abstract class AbstractDriver {
 
     public abstract GetAllTablesQuery: (
         schema: string,
-        dbNames: string
+        dbNames: string,
+        tableName: string
     ) => Promise<
         {
             TABLE_SCHEMA: string;
@@ -182,12 +183,14 @@ export default abstract class AbstractDriver {
         );
         dbModel = await this.GetAllTables(
             sqlEscapedSchema,
-            connectionOptons.databaseName
+            connectionOptons.databaseName,
+            connectionOptons.tableName
         );
         await this.GetCoulmnsFromEntity(
             dbModel,
             sqlEscapedSchema,
-            connectionOptons.databaseName
+            connectionOptons.databaseName,
+            connectionOptons.tableName
         );
         await this.GetIndexesFromEntity(
             dbModel,
@@ -209,9 +212,14 @@ export default abstract class AbstractDriver {
 
     public async GetAllTables(
         schema: string,
-        dbNames: string
+        dbNames: string,
+        tableName: string
     ): Promise<EntityInfo[]> {
-        const response = await this.GetAllTablesQuery(schema, dbNames);
+        const response = await this.GetAllTablesQuery(
+            schema,
+            dbNames,
+            tableName
+        );
         const ret: EntityInfo[] = [] as EntityInfo[];
         response.forEach(val => {
             const ent: EntityInfo = new EntityInfo();
@@ -391,7 +399,8 @@ export default abstract class AbstractDriver {
     public abstract async GetCoulmnsFromEntity(
         entities: EntityInfo[],
         schema: string,
-        dbNames: string
+        dbNames: string,
+        tableName: string
     ): Promise<EntityInfo[]>;
 
     public abstract async GetIndexesFromEntity(
