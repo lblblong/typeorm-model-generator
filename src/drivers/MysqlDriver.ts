@@ -26,7 +26,11 @@ export default class MysqlDriver extends AbstractDriver {
 
     private Connection: MYSQL.Connection;
 
-    public GetAllTablesQuery = async (schema: string, dbNames: string, tableName: string) => {
+    public GetAllTablesQuery = async (
+        schema: string,
+        dbNames: string,
+        tableName: string
+    ) => {
         const response = this.ExecQuery<{
             TABLE_SCHEMA: string;
             TABLE_NAME: string;
