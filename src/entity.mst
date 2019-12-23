@@ -4,14 +4,15 @@ import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne
 
 
 @Entity("{{sqlEntityName}}"{{#Schema}} ,{schema:"{{.}}"{{#if ../Database}}, database:"{{../Database}}"{{/if}} } {{/Schema}})
-{{#Indexes}}{{^isPrimaryKey}}@Index("{{name}}",[{{#columns}}"{{toPropertyName name}}",{{/columns}}]{{#isUnique}},{unique:true}{{/isUnique}})
-{{/isPrimaryKey}}{{/Indexes}}export class {{toEntityName tsEntityName}}{{#IsActiveRecord}} extends BaseEntity{{/IsActiveRecord}} {
+export class {{toEntityName tsEntityName}}{{#IsActiveRecord}} extends BaseEntity{{/IsActiveRecord}} {
 {{#Columns}}
 
     
-   {{^relations}}{{#options}}{{#generated}}  @PrimaryGeneratedColumn({
+    {{^relations}}{{#options}}{{#generated}} 
+    {{#comment}}/** {{.}} */{{/comment}}
+    @PrimaryGeneratedColumn({
         type:"{{type}}", {{/generated}}{{^generated}} 
-    /** {{comment}} */ 
+    {{#comment}}/** {{.}} */{{/comment}}
     @Column("{{type}}",{ {{#nullable}}
         nullable:true,{{/nullable}}{{^nullable}}
         nullable:false,{{/nullable}}{{#primary}}
@@ -20,13 +21,13 @@ import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne
         length:{{.}},{{/length}}{{#width}}
         width:{{.}},{{/width}}{{#unsigned}}
         unsigned: true,{{/unsigned}}{{#default}}
-        default: {{.}},{{/default}}{{#precision}}
+        default: "{{.}}",{{/default}}{{#precision}}
         precision:{{.}},{{/precision}}{{#scale}}
         scale:{{.}},{{/scale}}{{#enum}}
         enum:[{{.}}],{{/enum}}{{#array}}
-        array:{{array}},{{/array}}
-        comment:"{{comment}}"
-        }){{/options}}
+        array:{{array}},{{/array}}{{#comment}}
+        comment:"{{.}}",{{/comment}}
+    }){{/options}}
     {{printPropertyVisibility}}{{toPropertyName tsName}}{{strictMode}}:{{tsType}}{{#options/nullable}} | null{{/options/nullable}};
         {{/relations}}{{#relations}}
     @{{relationType}}(()=>{{toEntityName relatedTable}}, ({{toPropertyName relatedTable}}: {{toEntityName relatedTable}})=>{{toPropertyName relatedTable}}.{{#if isOwner}}{{toPropertyName ownerColumn}},{ {{#../options/primary}}primary:true,{{/../options/primary}}{{^../options/nullable}} nullable:false,{{/../options/nullable}}{{#actionOnDelete}}onDelete: '{{.}}',{{/actionOnDelete}}{{#actionOnUpdate}}onUpdate: '{{.}}'{{/actionOnUpdate}} }{{else}}{{toPropertyName relatedColumn}}{{#if (or actionOnDelete actionOnUpdate ) }},{ {{#actionOnDelete}}onDelete: '{{.}}' ,{{/actionOnDelete}}{{#actionOnUpdate}}onUpdate: '{{.}}'{{/actionOnUpdate}} }{{/if}}{{/if}}){{#isOwner}}
@@ -34,16 +35,14 @@ import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne
     {{#if (or isOneToMany isManyToMany)}}{{printPropertyVisibility}}{{toPropertyName ../tsName}}{{strictMode}}:{{toLazy (concat  (toEntityName relatedTable) "[]")}};
     {{else}}{{printPropertyVisibility}}{{toPropertyName ../tsName}}{{strictMode}}:{{toLazy (concat (toEntityName relatedTable) ' | null')}};
     {{/if}}
-    {{#if relationIdField }}
-
+    {{#if relationIdField }}        
     @RelationId(({{toPropertyName ../../tsEntityName}}: {{toEntityName ../../tsEntityName}}) => {{toPropertyName ../../tsEntityName}}.{{toPropertyName ../tsName}})
     {{printPropertyVisibility}}{{toPropertyName ../tsName}}Id{{strictMode}}: {{#if isOneToOne}}{{toLazy ../tsType}}{{else}}{{toLazy (concat  ../tsType "[]")}}{{/if}};{{/if}}{{/relations}}
     {{/Columns}}
-    {{#if GenerateConstructor}}
-
+    {{#if GenerateConstructor}}     
     {{printPropertyVisibility}}constructor(init?: Partial<{{toEntityName tsEntityName}}>) {
         {{#IsActiveRecord}}super();
         {{/IsActiveRecord}}Object.assign(this, init);
-	}
+    }
     {{/if}}
 }

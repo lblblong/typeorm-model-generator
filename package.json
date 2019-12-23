@@ -1,6 +1,6 @@
 {
   "name": "typeorm-model-generator-plus",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Generates models for TypeORM from existing databases.",
   "bin": "bin/typeorm-model-generator-plus",
   "scripts": {
@@ -15,10 +15,6 @@
   },
   "author": "Kononnable",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/lblblong/typeorm-model-generator/issues"
-  },
-  "homepage": "https://github.com/lblblong/typeorm-model-generator#readme",
   "dependencies": {
     "change-case": "3.1.0",
     "fs-extra": "8.1.0",

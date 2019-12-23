@@ -80,13 +80,14 @@ export default class MysqlDriver extends AbstractDriver {
                     const colInfo: ColumnInfo = new ColumnInfo();
                     colInfo.tsName = resp.COLUMN_NAME;
                     colInfo.options.name = resp.COLUMN_NAME;
-                    colInfo.options.comment = resp.COLUMN_COMMENT;
+                    colInfo.options.comment = resp.COLUMN_COMMENT || undefined;
                     colInfo.options.nullable = resp.IS_NULLABLE === "YES";
                     colInfo.options.generated = resp.IsIdentity === 1;
                     colInfo.options.unique = resp.COLUMN_KEY === "UNI";
-                    colInfo.options.default = MysqlDriver.ReturnDefaultValueFunction(
-                        resp.COLUMN_DEFAULT
-                    );
+                    // colInfo.options.default = MysqlDriver.ReturnDefaultValueFunction(
+                    //     resp.COLUMN_DEFAULT
+                    // );
+                    colInfo.options.default = resp.COLUMN_DEFAULT;
                     colInfo.options.type = resp.DATA_TYPE as any;
                     colInfo.options.unsigned = resp.COLUMN_TYPE.endsWith(
                         " unsigned"
