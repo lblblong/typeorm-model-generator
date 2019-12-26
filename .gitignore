@@ -11,3 +11,4 @@ coverage/
 dist
 *.tgz
 .tomg-config
+.tomg-config.json

@@ -194,6 +194,9 @@ export function modelGenerationPhase(
         noEscape: true
     });
     databaseModel.forEach(element => {
+        for (const col of element.Columns) {
+            col.options["currentTimestamp"] = col.currentTimestamp;
+        }
         let casedFileName = "";
         switch (generationOptions.convertCaseFile) {
             case "camel":

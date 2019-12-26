@@ -6,6 +6,8 @@ export default class ColumnInfo {
 
     public tsName: string = "";
 
+    public currentTimestamp: boolean = false;
+
     public tsType:
         | "number"
         | "string"

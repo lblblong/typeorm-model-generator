@@ -83,6 +83,9 @@ export default class MysqlDriver extends AbstractDriver {
                     colInfo.options.comment = resp.COLUMN_COMMENT || undefined;
                     colInfo.options.nullable = resp.IS_NULLABLE === "YES";
                     colInfo.options.generated = resp.IsIdentity === 1;
+                    colInfo.currentTimestamp =
+                        resp.COLUMN_DEFAULT != null &&
+                        resp.COLUMN_DEFAULT.startsWith("CURRENT_TIMESTAMP");
                     colInfo.options.unique = resp.COLUMN_KEY === "UNI";
                     // colInfo.options.default = MysqlDriver.ReturnDefaultValueFunction(
                     //     resp.COLUMN_DEFAULT
