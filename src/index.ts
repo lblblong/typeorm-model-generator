@@ -22,15 +22,17 @@ async function CliLogic() {
         connectionOptions = retVal.connectionOptions;
         generationOptions = retVal.generationOptions;
         driver = retVal.driver;
-    } else if (fs.existsSync(path.resolve(process.cwd(), ".tomg-config"))) {
+    } else if (
+        fs.existsSync(path.resolve(process.cwd(), ".tomg-config.json"))
+    ) {
         console.log(
             `[${new Date().toLocaleTimeString()}] Using configuration file. [${path.resolve(
                 process.cwd(),
-                ".tomg-config"
+                ".tomg-config.json"
             )}]`
         );
         const retVal = await fs.readJson(
-            path.resolve(process.cwd(), ".tomg-config")
+            path.resolve(process.cwd(), ".tomg-config.json")
         );
         [connectionOptions, generationOptions] = retVal;
         driver = createDriver(connectionOptions.databaseType);
@@ -507,7 +509,7 @@ async function GetUtilParametersByInquirer() {
     ])) as any;
     if (saveConfig) {
         await fs.writeJson(
-            path.resolve(process.cwd(), ".tomg-config"),
+            path.resolve(process.cwd(), ".tomg-config.json"),
             [connectionOptions, generationOptions],
             { spaces: 2 }
         );
