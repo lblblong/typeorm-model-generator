@@ -2,15 +2,10 @@ import * as Handlebars from "handlebars";
 import { DataTypeDefaults } from "typeorm/driver/types/DataTypeDefaults";
 import * as TomgUtils from "./Utils";
 import AbstractDriver from "./drivers/AbstractDriver";
-import MssqlDriver from "./drivers/MssqlDriver";
-import MariaDbDriver from "./drivers/MariaDbDriver";
 import IConnectionOptions from "./IConnectionOptions";
 import IGenerationOptions from "./IGenerationOptions";
 import EntityInfo from "./models/EntityInfo";
-import PostgresDriver from "./drivers/PostgresDriver";
 import MysqlDriver from "./drivers/MysqlDriver";
-import OracleDriver from "./drivers/OracleDriver";
-import SqliteDriver from "./drivers/SqliteDriver";
 import NamingStrategy from "./NamingStrategy";
 import AbstractNamingStrategy from "./AbstractNamingStrategy";
 
@@ -19,19 +14,10 @@ import fs = require("fs");
 import path = require("path");
 
 export function createDriver(driverName: string): AbstractDriver {
+    console.log(driverName);
     switch (driverName) {
-        case "mssql":
-            return new MssqlDriver();
-        case "postgres":
-            return new PostgresDriver();
         case "mysql":
             return new MysqlDriver();
-        case "mariadb":
-            return new MariaDbDriver();
-        case "oracle":
-            return new OracleDriver();
-        case "sqlite":
-            return new SqliteDriver();
         default:
             TomgUtils.LogError("Database engine not recognized.", false);
             throw new Error("Database engine not recognized.");
@@ -215,6 +201,7 @@ export function modelGenerationPhase(
                 throw new Error("Unknown case style");
         }
         const resultFilePath = path.resolve(entitesPath, `${casedFileName}.ts`);
+        console.log(element);
         const rendered = compliedTemplate(element);
         fs.writeFileSync(resultFilePath, rendered, {
             encoding: "UTF-8",

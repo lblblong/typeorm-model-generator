@@ -35,7 +35,8 @@ export default class MysqlDriver extends AbstractDriver {
             TABLE_SCHEMA: string;
             TABLE_NAME: string;
             DB_NAME: string;
-        }>(`SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_SCHEMA as DB_NAME
+            TABLE_COMMENT: string;
+        }>(`SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_SCHEMA as DB_NAME, TABLE_COMMENT
             FROM information_schema.tables
             WHERE table_type='BASE TABLE'
             AND table_schema IN (${MysqlDriver.escapeCommaSeparatedList(
@@ -122,7 +123,7 @@ export default class MysqlDriver extends AbstractDriver {
                             colInfo.tsType = "number";
                             break;
                         case "bigint":
-                            colInfo.tsType = "string";
+                            colInfo.tsType = "number";
                             break;
                         case "float":
                             colInfo.tsType = "number";
@@ -131,7 +132,7 @@ export default class MysqlDriver extends AbstractDriver {
                             colInfo.tsType = "number";
                             break;
                         case "decimal":
-                            colInfo.tsType = "string";
+                            colInfo.tsType = "number";
                             break;
                         case "date":
                             colInfo.tsType = "string";

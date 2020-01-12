@@ -22,6 +22,8 @@ export default class EntityInfo {
 
     public Database?: string;
 
+    public Comment?: string;
+
     public relationImports() {
         const imports: string[] = [];
         this.Columns.forEach(column => {

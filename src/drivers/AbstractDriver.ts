@@ -75,6 +75,7 @@ export default abstract class AbstractDriver {
             TABLE_SCHEMA: string;
             TABLE_NAME: string;
             DB_NAME: string;
+            TABLE_COMMENT: string;
         }[]
     >;
 
@@ -225,6 +226,7 @@ export default abstract class AbstractDriver {
             const ent: EntityInfo = new EntityInfo();
             ent.tsEntityName = val.TABLE_NAME;
             ent.sqlEntityName = val.TABLE_NAME;
+            ent.Comment = val.TABLE_COMMENT;
             ent.Schema = val.TABLE_SCHEMA;
             ent.Columns = [] as ColumnInfo[];
             ent.Indexes = [] as IndexInfo[];
