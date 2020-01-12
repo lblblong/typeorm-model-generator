@@ -201,7 +201,6 @@ export function modelGenerationPhase(
                 throw new Error("Unknown case style");
         }
         const resultFilePath = path.resolve(entitesPath, `${casedFileName}.ts`);
-        console.log(element);
         const rendered = compliedTemplate(element);
         fs.writeFileSync(resultFilePath, rendered, {
             encoding: "UTF-8",
