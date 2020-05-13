@@ -10,9 +10,7 @@ export function LogError(
     console.error(`Error occured in typeorm-model-generator.`);
     console.error(`${packageVersion()}  node@${process.version}`);
     console.error(
-        `If you think this is a bug please open an issue including this log on ${
-            (packagejson as any).bugs.url
-        }`
+        `If you think this is a bug please open an issue including this log on github`
     );
     if (isABug && !passedError) {
         errObject = new Error().stack;
