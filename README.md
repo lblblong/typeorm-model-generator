@@ -12,6 +12,7 @@
 - 可指定生成某个表，使用方式：-t [tableName]
 - bigint 转换为 js 类型时转换为 number
 - 配置文件名字不同 .tomg-config.json
+- mysql -> mysql2
 
 示例：仅为 user 表生成 model
 

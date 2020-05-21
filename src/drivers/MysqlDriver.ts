@@ -1,4 +1,4 @@
-import * as MYSQL from "mysql";
+import * as MYSQL from "mysql2";
 import { ConnectionOptions } from "typeorm";
 import * as TypeormDriver from "typeorm/driver/mysql/MysqlDriver";
 import { DataTypeDefaults } from "typeorm/driver/types/DataTypeDefaults";
